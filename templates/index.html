@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+</head>
+<body>
+    <h1>Pixmap DEMO</h1>
+    <form method="post" action="/ctr_prediction" enctype="multipart/form-data">
+        <img id="uploadPreview" />
+        <input type="file" id="uploadImage" name="imagen" accept="image/png, image/jpeg" onchange="PreviewImage();" required>
+        <button type="submit">Enviar</button>
+    </form>
+
+</body>
+<script type="text/javascript">
+
+    function PreviewImage() {
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(document.getElementById("uploadImage").files[0]);
+
+        oFReader.onload = function (oFREvent) {
+            document.getElementById("uploadPreview").src = oFREvent.target.result;
+        };
+    };
+
+</script>
+</html>
