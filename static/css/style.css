@@ -1,0 +1,19 @@
+.contenedor-flex{
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cuadrantes{
+    margin: 10px;
+    width: 18%;
+    height: auto;
+}
+
+.titulos{
+    font-size: 64px;
+    text-align: center;
+}
