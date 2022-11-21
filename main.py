@@ -17,6 +17,8 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
+import base64
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -121,13 +123,19 @@ def ctr_prediction():
 
     x_norm = escalador.fit_transform(x)
     clf = pickle.load(open("finalized_model.sav", 'rb'))
-
-    predicho = clf.predict(x_norm)
+    print(clf.__getstate__()['_sklearn_version'])
+    #predicho = clf.predict(x_norm)
+    predicho = "predichoooo"
 
     return render_template('part2.html', filename=filename, predicho=predicho)
 
 def extractor(imagen):
-    img_original = cv.imread(f"static/uploads/{imagen}")
+    img_original = cv.imread(f"static/uploads/{imagen}") #<class 'numpy.ndarray'>
+    
+    b64 = image_to_base64(img_original)
+    b64_str = base64.b64decode(b64)
+    nparr = np.frombuffer(b64_str, np.uint8)
+    img_original = cv.imdecode(nparr, cv.IMREAD_COLOR)
 
     vertical = (img_original.shape)[0]
     vertical = int(vertical)
@@ -294,6 +302,16 @@ def extractor(imagen):
 def display_image(filename):
     return redirect(url_for('static', filename='uploads/' + filename), code=301)
     
+def image_to_base64(img):
+    ## transform the image to base64
+    retval, buffer = cv.imencode('.jpg', img)
+    b64_string = base64.b64encode(buffer)
+    b64_string = b64_string.decode("utf-8")
+    #b64_format = "data:image/jpg;base64," + b64_string
+    b64_format = b64_string
+    
+    return b64_format
+
 # @app.template_filter('nanmin')
 # def minimo_numpy(value):
 #     return np.nanmin(value)
